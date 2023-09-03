@@ -1,0 +1,12 @@
+
+with dailytransactions as (
+  select cast(transaction_time as date) txn_date,
+  sum(transaction_amount) as txn_amount
+  from transactions
+  group by cast(transaction_time as date)
+  order by cast(transaction_time as date)
+  )
+
+select *,
+avg(txn_amount) over (order by txn_date rows between 2 preceding and current row)
+from dailytransactions
